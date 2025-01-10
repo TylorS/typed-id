@@ -30,24 +30,31 @@ import { Effect } from 'effect'
 import { 
   DateTimes, 
   GetRandomValues, 
-  makeUuid, 
+  makeUuid4, 
+  makeUuid7,
+  Uuid7State
   makeNanoId, 
   makeUlid 
 } from '@typed/id'
 
-// Generate a UUID
-await makeUuid.pipe(
+// Generate a UUID v4
+await makeUuid4.pipe(
   Effect.provide(GetRandomValues.CryptoRandom),
-  // Effect.provide(GetRandomValues.PseudoRandom),
   Effect.flatMap(Effect.log),
   Effect.runPromise
 )
 // Output: "550e8400-e29b-41d4-a716-446655440000"
 
+await makeUuid7.pipe(
+  Effect.provide(Uuid7State.Default)
+  Effect.provide([GetRandomValues.CryptoRandom, DateTimes.Default]),
+  Effect.flatMap(Effect.log),
+  Effect.runPromise
+)
+
 // Generate a NanoID
 await makeNanoId.pipe(
   Effect.provide(GetRandomValues.CryptoRandom),
-  // Effect.provide(GetRandomValues.PseudoRandom),
   Effect.flatMap(Effect.log),
   Effect.runPromise
 )
@@ -55,12 +62,7 @@ await makeNanoId.pipe(
 
 // Generate a ULID
 await makeUlid.pipe(
-  Effect.provide([
-    GetRandomValues.CryptoRandom, 
-    // GetRandomValues.PseudoRandom,
-    DateTimes.Default
-    // DateTimes.Fixed(new Date(0))
-  ]),
+  Effect.provide([GetRandomValues.CryptoRandom, DateTimes.Default]),
   Effect.flatMap(Effect.log),
   Effect.runPromise
 )
@@ -71,7 +73,9 @@ await makeUlid.pipe(
 
 ### UUID
 
-- `makeUuid`: Generates a v4 UUID
+- `makeUuid4`: Generates a v4 UUID
+
+- `makeUuid7`: Generate a v7, time-sortable, UUID
 
 ### NanoID
 
