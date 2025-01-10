@@ -32,9 +32,7 @@ import {
   GetRandomValues, 
   makeUuid4, 
   makeUuid5,
-  makeUuid6,
   makeUuid7,
-  Uuid6State,
   Uuid7State,
   Uuid5Namespace,
   Sha1,
@@ -57,15 +55,6 @@ await makeUuid5(Uuid5Namespace.URL, 'https://example.com').pipe(
   Effect.runPromise
 )
 // Output: "2ed6657d-e927-568b-95e1-2665a8aea6a2"
-
-// Generate a UUID v6 (reordered time-based)
-await makeUuid6.pipe(
-  Effect.provide(Uuid6State.Default),
-  Effect.provide([GetRandomValues.CryptoRandom, DateTimes.Default]),
-  Effect.flatMap(Effect.log),
-  Effect.runPromise
-)
-// Output: "1ee6742c-8f9c-6000-b9d1-0242ac120002"
 
 // Generate a UUID v7 (time-sortable)
 await makeUuid7.pipe(

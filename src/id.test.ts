@@ -28,7 +28,7 @@ const makeTestValues = (length: number) => {
 }
 
 const provideTestValues = flow(
-  Effect.provide([Uuid6State.Default, Uuid7State.Default]),
+  Effect.provide([Uuid7State.Default, Uuid6State.Default]),
   Effect.provide(Sha1.Default),
   Effect.provide([
     GetRandomValues.layer((length) => Effect.succeed(makeTestValues(length))),
