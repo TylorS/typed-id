@@ -1,6 +1,16 @@
 import { describe, expect, it } from '@effect/vitest'
-import { Effect } from 'effect'
-import { DateTimes, GetRandomValues, isUuid, makeNanoId, makeUlid, makeUuid } from './index.js'
+import { Effect, flow } from 'effect'
+import {
+  DateTimes,
+  GetRandomValues,
+  isUuid4,
+  isUuid7,
+  makeNanoId,
+  makeUlid,
+  makeUuid4,
+  makeUuid7,
+  Uuid7State,
+} from './index.js'
 
 const makeTestValues = (length: number) => {
   const values = new Uint8Array(length)
@@ -10,19 +20,33 @@ const makeTestValues = (length: number) => {
   return values
 }
 
-const provideTestValues = Effect.provide([
-  GetRandomValues.layer((length) => Effect.succeed(makeTestValues(length))),
-  DateTimes.Fixed(new Date(0)),
-])
+const provideTestValues = flow(
+  Effect.provide(Uuid7State.Default),
+  Effect.provide([
+    GetRandomValues.layer((length) => Effect.succeed(makeTestValues(length))),
+    DateTimes.Fixed(new Date(0)),
+  ]),
+)
 
 describe(__filename, () => {
-  describe('Uuid', () => {
-    it.effect('generates a UUID', () =>
+  describe('Uuid4', () => {
+    it.effect('generates a UUID v4', () =>
       Effect.gen(function* (_) {
-        const id = yield* _(makeUuid)
-        expect(id).toEqual('00010203-0405-0607-0809-0a0b0c0d0e0f')
+        const id = yield* _(makeUuid4)
+        expect(id).toMatchInlineSnapshot(`"00010203-0405-4607-8809-0a0b0c0d0e0f"`)
         expect(id.length).toEqual(36)
-        expect(isUuid(id)).toEqual(true)
+        expect(isUuid4(id)).toEqual(true)
+      }).pipe(provideTestValues),
+    )
+  })
+
+  describe('Uuid7', () => {
+    it.effect('generates a UUID v7', () =>
+      Effect.gen(function* (_) {
+        const id = yield* _(makeUuid7)
+        expect(id).toMatchInlineSnapshot(`"00000000-0000-7030-9c20-260b0c0d0e0f"`)
+        expect(id.length).toEqual(36)
+        expect(isUuid7(id)).toEqual(true)
       }).pipe(provideTestValues),
     )
   })
@@ -31,8 +55,7 @@ describe(__filename, () => {
     it.effect('generates a NanoId', () =>
       Effect.gen(function* (_) {
         const id = yield* _(makeNanoId)
-
-        expect(id).toEqual('0123456789abcdefghijk')
+        expect(id).toMatchInlineSnapshot(`"0123456789abcdefghijk"`)
         expect(id.length).toEqual(21)
       }).pipe(provideTestValues),
     )

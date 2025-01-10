@@ -7,15 +7,15 @@ export class DateTimes extends Effect.Tag('DateTimes')<
     readonly date: Effect.Effect<Date>
   }
 >() {
-  static readonly make = (now: Effect.Effect<number>) =>
-    Effect.succeed({
+  static readonly make = (now: Effect.Effect<number>): Layer.Layer<DateTimes> =>
+    Layer.succeed(this, {
       now,
       date: now.pipe(Effect.map((millis) => new Date(millis))),
     })
 
-  static readonly Default = this.make(Effect.clockWith((clock) => clock.currentTimeMillis))
+  static readonly Default: Layer.Layer<DateTimes> = this.make(Effect.clockWith((clock) => clock.currentTimeMillis))
 
-  static readonly Fixed = (base: Date) =>
+  static readonly Fixed = (base: Date): Layer.Layer<DateTimes> =>
     Layer.effect(
       DateTimes,
       Effect.gen(function* () {
