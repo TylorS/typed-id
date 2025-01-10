@@ -51,6 +51,7 @@ await makeUuid7.pipe(
   Effect.flatMap(Effect.log),
   Effect.runPromise
 )
+// Output: "018e7768-c0b3-7000-8000-123456789abc"
 
 // Generate a NanoID
 await makeNanoId.pipe(
