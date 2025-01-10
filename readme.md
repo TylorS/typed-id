@@ -25,6 +25,12 @@ yarn add @typed/id effect
 - ⚡ Efficient and secure random value generation
 - 📦 Zero dependencies (except Effect)
 
+## Stackblitz
+
+Check the console to see the outputs
+
+> https://stackblitz.com/edit/vitejs-vite-eukvweq2?file=src%2Fmain.ts
+
 ## Usage
 
 ```typescript
