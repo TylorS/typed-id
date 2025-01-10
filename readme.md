@@ -138,7 +138,7 @@ Pre-defined namespaces for UUID v5 generation:
 
 - `makeCuid`: Generates a CUID2 (Collision-resistant Unique IDentifier)
 - `CuidState.layer(envData)`: Creates a CUID state layer with environment fingerprint
-  - `envData`: A string identifying the environment (e.g., 'browser', 'node', 'mobile-ios')
+  - `envData`: A string identifying the environment (e.g., 'browser', 'node', 'mobile-ios', uniqueProcessId())
   - Used to help prevent collisions in distributed systems
   - Cached and reused for efficiency
 - Format: 24 characters, starting with a lowercase letter, followed by numbers and lowercase letters
