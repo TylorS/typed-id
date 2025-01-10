@@ -5,17 +5,14 @@ import {
   GetRandomValues,
   isUuid4,
   isUuid5,
-  isUuid6,
   isUuid7,
   makeNanoId,
   makeUlid,
   makeUuid4,
   makeUuid5,
-  makeUuid6,
   makeUuid7,
   Sha1,
   Uuid5Namespace,
-  Uuid6State,
   Uuid7State,
 } from './index.js'
 
@@ -28,7 +25,7 @@ const makeTestValues = (length: number) => {
 }
 
 const provideTestValues = flow(
-  Effect.provide([Uuid7State.Default, Uuid6State.Default]),
+  Effect.provide([Uuid7State.Default]),
   Effect.provide(Sha1.Default),
   Effect.provide([
     GetRandomValues.layer((length) => Effect.succeed(makeTestValues(length))),
@@ -55,17 +52,6 @@ describe(__filename, () => {
         expect(id).toMatchInlineSnapshot(`"cfbff0d1-9375-5685-968c-48ce8b15ae17"`)
         expect(id.length).toEqual(36)
         expect(isUuid5(id)).toEqual(true)
-      }).pipe(provideTestValues),
-    )
-  })
-
-  describe('Uuid6', () => {
-    it.effect('generates a UUID v6', () =>
-      Effect.gen(function* (_) {
-        const id = yield* _(makeUuid6)
-        expect(id).toMatchInlineSnapshot(`"1b21dd21-3814-6000-8809-0b0b0c0d0e0f"`)
-        expect(id.length).toEqual(36)
-        expect(isUuid6(id)).toEqual(true)
       }).pipe(provideTestValues),
     )
   })
