@@ -88,7 +88,6 @@ await makeUlid.pipe(
 
 - `makeUuid4`: Generates a v4 UUID (random)
 - `makeUuid5`: Generates a v5 UUID (SHA-1 hash of namespace + name)
-- `makeUuid6`: Generates a v6 UUID (reordered time-based for better sorting)
 - `makeUuid7`: Generates a v7 UUID (time-sortable)
 
 ### UUID v5 Namespaces
