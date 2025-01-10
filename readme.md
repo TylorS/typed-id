@@ -17,7 +17,7 @@ yarn add @typed/id effect
 - 🎯 Type-safe ID generation
 - 🔧 Built on top of Effect
 - 🎨 Multiple ID format support:
-  - UUID (v4)
+  - UUID (v4, v5, v6, v7)
   - NanoID
   - ULID
 - ⚡ Efficient and secure random value generation
@@ -31,13 +31,18 @@ import {
   DateTimes, 
   GetRandomValues, 
   makeUuid4, 
+  makeUuid5,
+  makeUuid6,
   makeUuid7,
-  Uuid7State
+  Uuid6State,
+  Uuid7State,
+  Uuid5Namespace,
+  Sha1,
   makeNanoId, 
   makeUlid 
 } from '@typed/id'
 
-// Generate a UUID v4
+// Generate a UUID v4 (random)
 await makeUuid4.pipe(
   Effect.provide(GetRandomValues.CryptoRandom),
   Effect.flatMap(Effect.log),
@@ -45,8 +50,26 @@ await makeUuid4.pipe(
 )
 // Output: "550e8400-e29b-41d4-a716-446655440000"
 
+// Generate a UUID v5 (namespace + name based)
+await makeUuid5(Uuid5Namespace.URL, 'https://example.com').pipe(
+  Effect.provide(Sha1.Default),
+  Effect.flatMap(Effect.log),
+  Effect.runPromise
+)
+// Output: "2ed6657d-e927-568b-95e1-2665a8aea6a2"
+
+// Generate a UUID v6 (reordered time-based)
+await makeUuid6.pipe(
+  Effect.provide(Uuid6State.Default),
+  Effect.provide([GetRandomValues.CryptoRandom, DateTimes.Default]),
+  Effect.flatMap(Effect.log),
+  Effect.runPromise
+)
+// Output: "1ee6742c-8f9c-6000-b9d1-0242ac120002"
+
+// Generate a UUID v7 (time-sortable)
 await makeUuid7.pipe(
-  Effect.provide(Uuid7State.Default)
+  Effect.provide(Uuid7State.Default),
   Effect.provide([GetRandomValues.CryptoRandom, DateTimes.Default]),
   Effect.flatMap(Effect.log),
   Effect.runPromise
@@ -74,9 +97,18 @@ await makeUlid.pipe(
 
 ### UUID
 
-- `makeUuid4`: Generates a v4 UUID
+- `makeUuid4`: Generates a v4 UUID (random)
+- `makeUuid5`: Generates a v5 UUID (SHA-1 hash of namespace + name)
+- `makeUuid6`: Generates a v6 UUID (reordered time-based for better sorting)
+- `makeUuid7`: Generates a v7 UUID (time-sortable)
 
-- `makeUuid7`: Generate a v7, time-sortable, UUID
+### UUID v5 Namespaces
+
+Pre-defined namespaces for UUID v5 generation:
+- `Uuid5Namespace.DNS`: For DNS-based UUIDs
+- `Uuid5Namespace.URL`: For URL-based UUIDs
+- `Uuid5Namespace.OID`: For OID-based UUIDs
+- `Uuid5Namespace.X500`: For X.500 DN-based UUIDs
 
 ### NanoID
 
