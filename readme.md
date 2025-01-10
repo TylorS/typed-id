@@ -55,7 +55,7 @@ await makeUuid4.pipe(
 
 // Generate a UUID v5 (namespace + name based)
 await makeUuid5(Uuid5Namespace.URL, 'https://example.com').pipe(
-  Effect.provide(Sha1.Default),
+  Effect.provide([GetRandomValues.CryptoRandom, DateTimes.Default, Sha1.Default]),
   Effect.flatMap(Effect.log),
   Effect.runPromise
 )
