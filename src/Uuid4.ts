@@ -18,5 +18,5 @@ function uuid4FromSeed(seed: Uint8Array): Uuid4 {
   seed[6] = (seed[6] & 0x0f) | 0x40
   seed[8] = (seed[8] & 0x3f) | 0x80
 
-  return uuidStringify(seed) as Uuid4
+  return Uuid4.make(uuidStringify(seed))
 }

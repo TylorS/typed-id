@@ -20,11 +20,12 @@ export class DateTimes extends Effect.Tag('DateTimes')<
       DateTimes,
       Effect.gen(function* () {
         const clock = yield* Effect.clock
+        const baseN = BigInt(base.getTime())
         const startMillis = yield* clock.currentTimeMillis
         const now = clock.currentTimeMillis.pipe(
           Effect.map((millis) =>
             // Use BigInt to avoid floating point precision issues which can break deterministic testing
-            Number(BigInt(base.getTime()) + BigInt(millis) - BigInt(startMillis)),
+            Number(baseN + BigInt(millis) - BigInt(startMillis)),
           ),
         )
 
@@ -35,3 +36,4 @@ export class DateTimes extends Effect.Tag('DateTimes')<
       }),
     )
 }
+

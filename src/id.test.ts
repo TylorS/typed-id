@@ -1,5 +1,5 @@
 import { describe, expect, it } from '@effect/vitest'
-import { Effect, flow } from 'effect'
+import { Effect, flow, TestClock } from 'effect'
 import {
   DateTimes,
   GetRandomValues,
@@ -17,12 +17,15 @@ import {
   makeCuid,
   isCuid,
   CuidState,
+  makeKsuid,
+  isKsuid,
 } from './index.js'
+
 
 const makeTestValues = (length: number) => {
   const values = new Uint8Array(length)
   for (let i = 0; i < length; ++i) {
-    values[i] = i
+    values[i] = i % 256
   }
   return values
 }
@@ -102,6 +105,28 @@ describe(__filename, () => {
         expect(id2).not.toEqual(id)
         expect(isCuid(id2)).toEqual(true)
         expect(id2).toMatchInlineSnapshot(`"abeo5wmlmnjxjrnjiidlfvzp"`)
+      }).pipe(provideTestValues),
+    )
+  })
+
+  describe('Ksuid', () => {
+    it.effect('generates a KSUID', () =>
+      Effect.gen(function* () {
+        console.log(yield* DateTimes.now)
+        const id = yield* makeKsuid
+        expect(id.length).toEqual(27)
+        expect(isKsuid(id)).toEqual(true)
+        expect(id).toMatchInlineSnapshot(`"00000000SYW7RiJxkEgOGusQGwp"`)
+
+        yield* TestClock.adjust(1000)
+
+        console.log(yield* DateTimes.now)
+
+        // Generate another to ensure uniqueness
+        const id2 = yield* makeKsuid
+        expect(id2).not.toEqual(id)
+        expect(isKsuid(id2)).toEqual(true)
+        expect(id2).toMatchInlineSnapshot(`"000007n4UlmTXBzjUOTX3nzfyYx"`)
       }).pipe(provideTestValues),
     )
   })

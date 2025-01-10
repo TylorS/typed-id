@@ -72,6 +72,6 @@ export function makeUuid5(
     result[6] = (result[6] & 0x0f) | 0x50 // version 5
     result[8] = (result[8] & 0x3f) | 0x80 // variant 1
 
-    return uuidStringify(result) as Uuid5
+    return Uuid5.make(uuidStringify(result))
   })
 }

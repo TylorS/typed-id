@@ -100,5 +100,5 @@ function uuid7FromSeed({ timestamp, seq, randomBytes }: Uuid7Seed): Uuid7 {
   result[14] = randomBytes[14]
   result[15] = randomBytes[15]
 
-  return uuidStringify(result) as Uuid7
+  return Uuid7.make(uuidStringify(result))
 }

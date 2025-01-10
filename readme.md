@@ -1,6 +1,6 @@
 # @typed/id
 
-A TypeScript library providing common ID format generation using [Effect](https://effect.website/). This package includes implementations for UUID, NanoID, ULID, and CUID generation with a focus on type safety and functional programming principles.
+A TypeScript library providing common ID format generation using [Effect](https://effect.website/). This package includes implementations for UUID, NanoID, ULID, CUID2, and KSUID generation with a focus on type safety and functional programming principles.
 
 ## Installation
 
@@ -21,6 +21,7 @@ yarn add @typed/id effect
   - NanoID
   - ULID
   - CUID2
+  - KSUID
 - ⚡ Efficient and secure random value generation
 - 📦 Zero dependencies (except Effect)
 
@@ -41,6 +42,7 @@ import {
   makeUlid,
   makeCuid,
   CuidState,
+  makeKsuid,
 } from '@typed/id'
 
 // Generate a UUID v4 (random)
@@ -92,6 +94,14 @@ await makeCuid.pipe(
   Effect.runPromise
 )
 // Output: "clh3aqnd900003b64zpka3df"
+
+// Generate a KSUID
+await makeKsuid.pipe(
+  Effect.provide([GetRandomValues.CryptoRandom, DateTimes.Default]),
+  Effect.flatMap(Effect.log),
+  Effect.runPromise
+)
+// Output: "1jIGxyVFPeR4GkCcDPQU2bXhxy9"
 ```
 
 ## API
@@ -132,6 +142,21 @@ Pre-defined namespaces for UUID v5 generation:
   - URL-safe
   - Horizontally scalable
   - Includes timestamp for time-based sorting
+
+### KSUID
+
+- `makeKsuid`: Generates a KSUID (K-Sortable Unique IDentifier)
+- Format: 27 characters of base62 (0-9A-Za-z)
+- Components:
+  - 32-bit timestamp (seconds since 2014-03-01)
+  - 128-bit random payload
+- Properties:
+  - Time-sortable (lexicographically ordered by time)
+  - URL-safe (base62 encoded)
+  - Includes entropy for uniqueness
+  - Fixed size (27 characters)
+  - ~136 years of timestamp space from 2014
+  - No special character dependencies
 
 ## License
 
