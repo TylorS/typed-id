@@ -1,6 +1,6 @@
 # @typed/id
 
-A TypeScript library providing common ID format generation using [Effect](https://effect.website/). This package includes implementations for UUID, NanoID, and ULID generation with a focus on type safety and functional programming principles.
+A TypeScript library providing common ID format generation using [Effect](https://effect.website/). This package includes implementations for UUID, NanoID, ULID, and CUID generation with a focus on type safety and functional programming principles.
 
 ## Installation
 
@@ -17,9 +17,10 @@ yarn add @typed/id effect
 - 🎯 Type-safe ID generation
 - 🔧 Built on top of Effect
 - 🎨 Multiple ID format support:
-  - UUID (v4, v5, v6, v7)
+  - UUID (v4, v5, v7)
   - NanoID
   - ULID
+  - CUID2
 - ⚡ Efficient and secure random value generation
 - 📦 Zero dependencies (except Effect)
 
@@ -37,7 +38,9 @@ import {
   Uuid5Namespace,
   Sha1,
   makeNanoId, 
-  makeUlid 
+  makeUlid,
+  makeCuid,
+  CuidState,
 } from '@typed/id'
 
 // Generate a UUID v4 (random)
@@ -80,6 +83,15 @@ await makeUlid.pipe(
   Effect.runPromise
 )
 // Output: "01ARZ3NDEKTSV4RRFFQ69G5FAV"
+
+// Generate a CUID
+await makeCuid.pipe(
+  Effect.provide(CuidState.layer('my-environment')), // Provide environment fingerprint
+  Effect.provide([GetRandomValues.CryptoRandom, DateTimes.Default]),
+  Effect.flatMap(Effect.log),
+  Effect.runPromise
+)
+// Output: "clh3aqnd900003b64zpka3df"
 ```
 
 ## API
@@ -105,6 +117,21 @@ Pre-defined namespaces for UUID v5 generation:
 ### ULID
 
 - `makeUlid`: Generates a ULID (Universally Unique Lexicographically Sortable Identifier)
+
+### CUID
+
+- `makeCuid`: Generates a CUID2 (Collision-resistant Unique IDentifier)
+- `CuidState.layer(envData)`: Creates a CUID state layer with environment fingerprint
+  - `envData`: A string identifying the environment (e.g., 'browser', 'node', 'mobile-ios')
+  - Used to help prevent collisions in distributed systems
+  - Cached and reused for efficiency
+- Format: 24 characters, starting with a lowercase letter, followed by numbers and lowercase letters
+- Properties:
+  - Sequential for database performance
+  - Secure from enumeration
+  - URL-safe
+  - Horizontally scalable
+  - Includes timestamp for time-based sorting
 
 ## License
 

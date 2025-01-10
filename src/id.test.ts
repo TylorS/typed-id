@@ -14,6 +14,9 @@ import {
   Sha1,
   Uuid5Namespace,
   Uuid7State,
+  makeCuid,
+  isCuid,
+  CuidState,
 } from './index.js'
 
 const makeTestValues = (length: number) => {
@@ -25,19 +28,18 @@ const makeTestValues = (length: number) => {
 }
 
 const provideTestValues = flow(
-  Effect.provide([Uuid7State.Default]),
+  Effect.provide(CuidState.layer('test')),
+  Effect.provide(Uuid7State.Default),
   Effect.provide(Sha1.Default),
-  Effect.provide([
-    GetRandomValues.layer((length) => Effect.succeed(makeTestValues(length))),
-    DateTimes.Fixed(new Date(0)),
-  ]),
+  Effect.provide(GetRandomValues.layer((length) => Effect.succeed(makeTestValues(length)))),
+  Effect.provide(DateTimes.Fixed(new Date(0))),
 )
 
 describe(__filename, () => {
   describe('Uuid4', () => {
     it.effect('generates a UUID v4', () =>
-      Effect.gen(function* (_) {
-        const id = yield* _(makeUuid4)
+      Effect.gen(function* () {
+        const id = yield* makeUuid4
         expect(id).toMatchInlineSnapshot(`"00010203-0405-4607-8809-0a0b0c0d0e0f"`)
         expect(id.length).toEqual(36)
         expect(isUuid4(id)).toEqual(true)
@@ -47,8 +49,8 @@ describe(__filename, () => {
 
   describe('Uuid5', () => {
     it.effect('generates a UUID v5', () =>
-      Effect.gen(function* (_) {
-        const id = yield* _(makeUuid5(Uuid5Namespace.DNS, 'example.com'))
+      Effect.gen(function* () {
+        const id = yield* makeUuid5(Uuid5Namespace.DNS, 'example.com')
         expect(id).toMatchInlineSnapshot(`"cfbff0d1-9375-5685-968c-48ce8b15ae17"`)
         expect(id.length).toEqual(36)
         expect(isUuid5(id)).toEqual(true)
@@ -58,8 +60,8 @@ describe(__filename, () => {
 
   describe('Uuid7', () => {
     it.effect('generates a UUID v7', () =>
-      Effect.gen(function* (_) {
-        const id = yield* _(makeUuid7)
+      Effect.gen(function* () {
+        const id = yield* makeUuid7
         expect(id).toMatchInlineSnapshot(`"00000000-0000-7030-9c20-260b0c0d0e0f"`)
         expect(id.length).toEqual(36)
         expect(isUuid7(id)).toEqual(true)
@@ -69,8 +71,8 @@ describe(__filename, () => {
 
   describe('NanoId', () => {
     it.effect('generates a NanoId', () =>
-      Effect.gen(function* (_) {
-        const id = yield* _(makeNanoId)
+      Effect.gen(function* () {
+        const id = yield* makeNanoId
         expect(id).toMatchInlineSnapshot(`"0123456789abcdefghijk"`)
         expect(id.length).toEqual(21)
       }).pipe(provideTestValues),
@@ -79,10 +81,27 @@ describe(__filename, () => {
 
   describe('Ulid', () => {
     it.effect('generates a Ulid', () =>
-      Effect.gen(function* (_) {
-        const id = yield* _(makeUlid)
+      Effect.gen(function* () {
+        const id = yield* makeUlid
         expect(id).toMatchInlineSnapshot(`"00000000000123456789ABCDEF"`)
         expect(id.length).toEqual(26)
+      }).pipe(provideTestValues),
+    )
+  })
+
+  describe('Cuid', () => {
+    it.effect('generates a CUID', () =>
+      Effect.gen(function* () {
+        const id = yield* makeCuid
+        expect(id.length).toEqual(24)
+        expect(isCuid(id)).toEqual(true)
+        expect(id).toMatchInlineSnapshot(`"ai17q5mkkp8w5f2cey3lyzu5"`)
+
+        // Generate another to ensure uniqueness
+        const id2 = yield* makeCuid
+        expect(id2).not.toEqual(id)
+        expect(isCuid(id2)).toEqual(true)
+        expect(id2).toMatchInlineSnapshot(`"abeo5wmlmnjxjrnjiidlfvzp"`)
       }).pipe(provideTestValues),
     )
   })
