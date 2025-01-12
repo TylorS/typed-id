@@ -1,4 +1,5 @@
-import { Effect, Layer, Option, TestClock } from 'effect'
+import * as Effect from 'effect/Effect'
+import * as Layer from 'effect/Layer'
 
 export class DateTimes extends Effect.Tag('DateTimes')<
   DateTimes,

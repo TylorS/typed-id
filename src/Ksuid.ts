@@ -1,4 +1,5 @@
-import { Effect, Schema } from 'effect'
+import * as Effect from 'effect/Effect'
+import * as Schema from 'effect/Schema'
 import { DateTimes } from './DateTimes.js'
 import { GetRandomValues } from './GetRandomValues.js'
 

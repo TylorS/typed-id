@@ -1,6 +1,6 @@
 import * as Effect from 'effect/Effect'
+import * as Schema from 'effect/Schema'
 import { GetRandomValues } from './GetRandomValues.js'
-import { Schema } from 'effect'
 import { uuidStringify } from './UuidStringify.js'
 
 export const Uuid4 = Schema.UUID.pipe(Schema.brand('@typed/id/UUID4'))

@@ -1,5 +1,5 @@
-import { Schema } from 'effect'
 import * as Effect from 'effect/Effect'
+import * as Schema from 'effect/Schema'
 import { GetRandomValues } from './GetRandomValues.js'
 
 const nanoIdPattern = /[0-9a-zA-Z_-]/

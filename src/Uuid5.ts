@@ -1,5 +1,6 @@
 import * as Effect from 'effect/Effect'
-import { Layer, Schema } from 'effect'
+import * as Layer from 'effect/Layer'
+import * as Schema from 'effect/Schema'
 import { uuidStringify } from './UuidStringify.js'
 
 export const Uuid5 = Schema.UUID.pipe(Schema.brand('@typed/id/UUID5'))
