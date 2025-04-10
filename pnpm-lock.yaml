@@ -7,20 +7,19 @@ settings:
 importers:
 
   .:
-    dependencies:
-      effect:
-        specifier: ^3.11.9
-        version: 3.12.0
     devDependencies:
       '@biomejs/biome':
         specifier: ^1.9.4
         version: 1.9.4
       '@effect/vitest':
         specifier: ^0.16.0
-        version: 0.16.0(effect@3.12.0)(vitest@2.1.8(@types/node@22.10.2))
+        version: 0.16.0(effect@3.14.7)(vitest@2.1.8(@types/node@22.10.2))
       '@types/node':
         specifier: ^22.10.2
         version: 22.10.2
+      effect:
+        specifier: ^3.14.7
+        version: 3.14.7
       typescript:
         specifier: ^5.4.2
         version: 5.7.2
@@ -325,6 +324,9 @@ packages:
     cpu: [x64]
     os: [win32]
 
+  '@standard-schema/spec@1.0.0':
+    resolution: {integrity: sha512-m2bOd0f2RT9k8QJx1JN85cZYyH1RqFBdlwtkSlf4tBDYLCiiZnv1fIIwacK6cqwXavOydf0NPToMQgpKq+dVlA==}
+
   '@types/estree@1.0.6':
     resolution: {integrity: sha512-AYnb1nQyY49te+VRAVgmzfcgjYS91mY5P0TKUDCLEM+gNnA+3T6rWITXRLYCpahpqSQbN5cE+gHpnPyXjHWxcw==}
 
@@ -389,8 +391,8 @@ packages:
     resolution: {integrity: sha512-h5k/5U50IJJFpzfL6nO9jaaumfjO/f2NjK/oYB2Djzm4p9L+3T9qWpZqZ2hAbLPuuYq9wrU08WQyBTL5GbPk5Q==}
     engines: {node: '>=6'}
 
-  effect@3.12.0:
-    resolution: {integrity: sha512-b/u9s3b9HfTo0qygVouegP0hkbiuxRIeaCe1ppf8P88hPyl6lKCbErtn7Az4jG7LuU7f0Wgm4c8WXbMcL2j8+g==}
+  effect@3.14.7:
+    resolution: {integrity: sha512-vAev6B05EYMhh1fpCKsiUdVKmT0ph3TjTTfPno384dLL39tI88OIV2QNkNby506NY1L/w1NIaxcaKGfEw3rPhw==}
 
   es-module-lexer@1.6.0:
     resolution: {integrity: sha512-qqnD1yMU6tk/jnaMosogGySTZP8YtUgAffA9nMN+E/rjxcfRQ6IEk7IiozUjgxKoFHBGjTLnrHB/YC45r/59EQ==}
@@ -594,9 +596,9 @@ snapshots:
   '@biomejs/cli-win32-x64@1.9.4':
     optional: true
 
-  '@effect/vitest@0.16.0(effect@3.12.0)(vitest@2.1.8(@types/node@22.10.2))':
+  '@effect/vitest@0.16.0(effect@3.14.7)(vitest@2.1.8(@types/node@22.10.2))':
     dependencies:
-      effect: 3.12.0
+      effect: 3.14.7
       vitest: 2.1.8(@types/node@22.10.2)
 
   '@esbuild/aix-ppc64@0.21.5':
@@ -727,6 +729,8 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.29.1':
     optional: true
 
+  '@standard-schema/spec@1.0.0': {}
+
   '@types/estree@1.0.6': {}
 
   '@types/node@22.10.2':
@@ -793,8 +797,9 @@ snapshots:
 
   deep-eql@5.0.2: {}
 
-  effect@3.12.0:
+  effect@3.14.7:
     dependencies:
+      '@standard-schema/spec': 1.0.0
       fast-check: 3.23.2
 
   es-module-lexer@1.6.0: {}
